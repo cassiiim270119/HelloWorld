@@ -1,0 +1,51 @@
+entity Account {
+	id Long,
+    userName String,
+    fullName String,
+    hourValue BigDecimal,
+    location String,
+    workGroupId Long,
+    password String
+}
+
+entity TaskTracking {
+	id Long,
+    accountId Long,
+    taskDescription String required maxlength(100),
+    user_agent String,
+    clientIp String,
+    createdAt ZonedDateTime
+}
+
+entity TimeTracking {
+	id Long,
+    accountId Long,
+    user_agent String,
+    clientIp String,
+    createdAt ZonedDateTime,
+    actived Integer,
+    edited Integer,
+    medicalCertificateId Long
+}
+
+entity Vacation {
+	id Long,
+    accountId Long,
+    observation String,
+    beginDate ZonedDateTime,
+    endDate ZonedDateTime,
+}
+
+// defining multiple oneToOne relationships
+relationship OneToOne {
+	TimeTracking{account} to Account,
+	TaskTracking{account} to Account,
+	JobHistory{employee} to Employee
+}
+
+paginate TimeTracking, TaskTracking with infinite-scroll
+paginate Vacation with pagination
+
+dto * with mapstruct
+
+service all with serviceImpl
